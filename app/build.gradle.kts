@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.chimes_android"
+    namespace = "com.cornellappdev.chimes"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.example.chimes_android"
+        applicationId = "com.cornellappdev.chimes"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.ui.graphics)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

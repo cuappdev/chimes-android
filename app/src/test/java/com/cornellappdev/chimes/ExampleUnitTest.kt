@@ -1,4 +1,4 @@
-package com.example.chimes_android
+package com.cornellappdev.chimes
 
 import org.junit.Test
 

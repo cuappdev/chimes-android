@@ -1,4 +1,4 @@
-package com.example.chimes_android.ui.theme
+package com.cornellappdev.chimes.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
