@@ -4,6 +4,10 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -13,7 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.MaterialTheme
@@ -21,25 +25,23 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cornellappdev.chimes.R
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
+private val ChimesRed = Color(0xFFCC5555)
+private val VeryLightPink = Color(0xFFFEF7F7)
+private val VeryLightGray = Color(0xFFBCB2B2)
 
 @Composable
 fun Onboarding () {
@@ -51,22 +53,41 @@ fun Onboarding () {
     val headerOffsetY = remember { Animatable(0f) }
     val loginAlpha = remember { Animatable(0f) }
     val loginOffsetY = remember { Animatable(300f) } // Starts 300dp below
-    val minuteHandRotation = remember { Animatable(0f) }
-    val hourHandRotation = remember { Animatable(0f) }
     var handsSpinStarted by remember { mutableStateOf(false) }
+    val minuteHandRotation: Float
+    val hourHandRotation: Float
+    if (handsSpinStarted) {
+        val handsRotationTransition = rememberInfiniteTransition(label = "handsRotationTransition")
+        val minuteRotation by handsRotationTransition.animateFloat(
+            initialValue = 0f,
+            targetValue = 360f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(durationMillis = 2_000, easing = LinearEasing),
+                repeatMode = RepeatMode.Restart
+            ),
+            label = "minuteHandRotation"
+        )
+        val hourRotation by handsRotationTransition.animateFloat(
+            initialValue = 0f,
+            targetValue = 360f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(durationMillis = 10_000, easing = LinearEasing),
+                repeatMode = RepeatMode.Restart
+            ),
+            label = "hourHandRotation"
+        )
+        minuteHandRotation = minuteRotation
+        hourHandRotation = hourRotation
+    } else {
+        minuteHandRotation = 0f
+        hourHandRotation = 0f
+    }
 
     LaunchedEffect(Unit) {
         delay(300)
 
-        launch {
-            bgAlpha.animateTo(0f, tween(300, easing = LinearEasing))
-        }
-
-        delay(300)
-        launch {
-            whiteAlpha.animateTo(1f, tween(300, easing = LinearEasing))
-        }
-        delay(300)
+        bgAlpha.animateTo(0f, tween(300, easing = LinearEasing))
+        whiteAlpha.animateTo(1f, tween(300, easing = LinearEasing))
         logoAlpha.animateTo(1f, tween(300, easing = LinearEasing))
 
         delay(300)
@@ -74,43 +95,22 @@ fun Onboarding () {
         logoScale.animateTo(0.55f, tween(300, easing = FastOutSlowInEasing))
         handsSpinStarted = true
 
-
         delay(300)
         chimesAlpha.animateTo(1f, tween(300, easing = LinearEasing))
 
         delay(300)
-        launch {
-            headerOffsetY.animateTo(-100f, tween(300, easing = FastOutSlowInEasing))
-        }
+        
+        headerOffsetY.animateTo(-100f, tween(300, easing = FastOutSlowInEasing))
+        
         delay(300)
+        
         launch {
             loginOffsetY.animateTo(0f, tween(300, easing = FastOutSlowInEasing)) //slide
         }
         loginAlpha.animateTo(1f, tween(300, easing = LinearEasing)) //fade
     }
 
-    LaunchedEffect(handsSpinStarted) {
-        if (!handsSpinStarted) return@LaunchedEffect
-
-        launch {
-            while (isActive) {
-                minuteHandRotation.animateTo(
-                    minuteHandRotation.value + 360f,
-                    animationSpec = tween(durationMillis = 2_000, easing = LinearEasing)
-                )
-            }
-        }
-        launch {
-            while (isActive) {
-                hourHandRotation.animateTo(
-                    hourHandRotation.value + 360f,
-                    animationSpec = tween(durationMillis = 10_000, easing = LinearEasing)
-                )
-            }
-        }
-    }
-
-    Box(modifier = Modifier.fillMaxSize().background(Color(0xFFFEF7F7))) {
+    Box(modifier = Modifier.fillMaxSize().background(VeryLightPink)) {
 
         Image(
             painter = painterResource(id = R.drawable.ic_onboarding_background),
@@ -135,8 +135,8 @@ fun Onboarding () {
                 modifier = Modifier
                     .size((150 * logoScale.value).dp)
                     .alpha(logoAlpha.value),
-                minuteHandRotation = minuteHandRotation.value,
-                hourHandRotation = hourHandRotation.value
+                minuteHandRotation = minuteHandRotation,
+                hourHandRotation = hourHandRotation
             )
 
             Spacer(modifier = Modifier.height(10.dp))
@@ -145,7 +145,7 @@ fun Onboarding () {
                 text = "chimes",
                 style = MaterialTheme.typography.titleMedium.copy(
                     fontWeight = FontWeight.Medium,
-                    color = Color(0xFFCC5555)
+                    color = ChimesRed
                 ),
                 modifier = Modifier.alpha(chimesAlpha.value),
                 fontSize = 40.sp
@@ -161,96 +161,31 @@ fun Onboarding () {
                     modifier = Modifier
                         .alpha(loginAlpha.value)
                         .offset(y = loginOffsetY.value.dp)
-                        .width(333.dp)
+                        .fillMaxWidth()
+                        .padding(horizontal = 15.dp)
                 ) {
-                    val curve = 50.dp
-
                     Spacer(modifier = Modifier.height(64.dp))
 
-                    Button(
-                        modifier = Modifier
-                            .height(54.dp)
-                            .border(
-                                width = 1.dp,
-                                color = Color(0XFFBCB2B2),
-                                shape = RoundedCornerShape(curve)
-                            )
-                            .fillMaxWidth(),
-                        onClick = {},
-                        shape = RoundedCornerShape(curve),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.White,
-                            contentColor = Color.Black
-                        ),
-                        contentPadding = PaddingValues(horizontal = 20.dp)
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_google_g),
-                                contentDescription = "Google logo",
-                                modifier = Modifier.size(32.dp),
-                                contentScale = ContentScale.Fit
-                            )
-                            Spacer(modifier = Modifier.width(16.dp))
-                            Text(
-                                text = "Log-in with Google",
-                                style = MaterialTheme.typography.titleMedium.copy(
-                                    fontWeight = FontWeight.Normal,
-                                    color = Color.Black
-                                ),
-                                fontSize = 14.sp
-                            )
-                        }
-                    }
+                    LoginButton(
+                        text = "Log-in with Google",
+                        iconRes = R.drawable.ic_google_g,
+                        contentDescription = "Google logo",
+                        onClick = {}
+                    )
 
                     Spacer(modifier = Modifier.height(15.dp))
 
-                    Button(
-                        modifier = Modifier
-                            .height(54.dp)
-                            .border(
-                                width = 1.dp,
-                                color = Color(0XFFBCB2B2),
-                                shape = RoundedCornerShape(curve)
-                            )
-                            .fillMaxWidth(),
-                        onClick = {},
-                        shape = RoundedCornerShape(curve),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.White,
-                            contentColor = Color.Black
-                        ),
-                        contentPadding = PaddingValues(horizontal = 20.dp)
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_cornell_logo),
-                                contentDescription = "Cornell logo",
-                                modifier = Modifier.size(32.dp),
-                                contentScale = ContentScale.Fit
-                            )
-                            Spacer(modifier = Modifier.width(16.dp))
-                            Text(
-                                text = "Log-in with Cornell netID",
-                                style = MaterialTheme.typography.titleMedium.copy(
-                                    fontWeight = FontWeight.Normal,
-                                    color = Color.Black
-                                ),
-                                fontSize = 14.sp
-                            )
-                        }
-                    }
+                    LoginButton(
+                        text = "Log-in with Cornell netID",
+                        iconRes = R.drawable.ic_cornell_logo,
+                        contentDescription = "Cornell logo",
+                        onClick = {}
+                    )
 
                     Spacer(modifier = Modifier.height(45.dp))
 
                     HorizontalDivider(
-                        color = Color(0XFFBCB2B2),
+                        color = VeryLightGray,
                         thickness = 1.dp,
                         modifier = Modifier
                             .width(200.dp)
@@ -258,11 +193,9 @@ fun Onboarding () {
 
                     Spacer(modifier = Modifier.height(45.dp))
 
-                    Button(
+
+                    TextButton(
                         onClick = {},
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.Transparent,
-                        ),
                         shape = RoundedCornerShape(0.dp),
                         modifier = Modifier.height(25.dp),
                         contentPadding = PaddingValues(0.dp)
@@ -279,6 +212,55 @@ fun Onboarding () {
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun LoginButton(
+    text: String,
+    iconRes: Int,
+    contentDescription: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val curve = 50.dp
+    Button(
+        modifier = modifier
+            .height(54.dp)
+            .border(
+                width = 1.dp,
+                color = VeryLightGray,
+                shape = RoundedCornerShape(curve)
+            )
+            .fillMaxWidth(),
+        onClick = onClick,
+        shape = RoundedCornerShape(curve),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.White,
+            contentColor = Color.Black
+        ),
+        contentPadding = PaddingValues(horizontal = 20.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Icon(
+                painter = painterResource(id = iconRes),
+                contentDescription = contentDescription,
+                modifier = Modifier.size(32.dp),
+                tint = Color.Unspecified
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(
+                text = text,
+                style = MaterialTheme.typography.titleMedium.copy(
+                    fontWeight = FontWeight.Normal,
+                    color = Color.Black
+                ),
+                fontSize = 14.sp
+            )
         }
     }
 }
@@ -315,13 +297,13 @@ private fun ClockLogo(
             modifier = Modifier
                 .size(hourHandWidth, hourHandHeight)
                 .graphicsLayer {
-                    val value = 11f / 30f
+                    val pivotFraction = 11f / 30f
 
-                    translationX = (0.5f - value) * size.width
-                    translationY = (0.5f - value) * size.height
+                    translationX = (0.5f - pivotFraction) * size.width
+                    translationY = (0.5f - pivotFraction) * size.height
                     
                     rotationZ = hourHandRotation
-                    transformOrigin = TransformOrigin(value, value)
+                    transformOrigin = TransformOrigin(pivotFraction, pivotFraction)
                 }
         )
 
@@ -332,15 +314,21 @@ private fun ClockLogo(
             modifier = Modifier
                 .size(minuteHandWidth, minuteHandHeight)
                 .graphicsLayer {
-                    val xValue = 2.5f/25f
-                    val yValue = 16.5f/25f
+                    val pivotFractionX = 2.5f/25f
+                    val pivotFractionY = 16.5f/25f
 
-                    translationX = (0.5f - xValue) * size.width
-                    translationY = (0.5f - yValue) * size.height
+                    translationX = (0.5f - pivotFractionX) * size.width
+                    translationY = (0.5f - pivotFractionY) * size.height
 
                     rotationZ = minuteHandRotation
-                    transformOrigin = TransformOrigin(xValue, yValue)
+                    transformOrigin = TransformOrigin(pivotFractionX, pivotFractionY)
                 }
         )
     }
+}
+
+@Preview
+@Composable
+fun OnboardingPreview() {
+    Onboarding()
 }
