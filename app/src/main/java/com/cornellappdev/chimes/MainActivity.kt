@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cornellappdev.chimes.ui.components.HeaderButton
+import com.cornellappdev.chimes.ui.navigation.MainNavigation
 import com.cornellappdev.chimes.ui.screens.HomeScreen
 import com.cornellappdev.chimes.ui.screens.Onboarding
 import com.cornellappdev.chimes.ui.theme.ChimesandroidTheme
@@ -56,52 +57,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Onboarding()
+            MainNavigation()
         }
     }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ChimesandroidTheme {
-        Greeting("Android")
-    }
-}
-
-fun Modifier.clippedShadow(
-    shape: Shape,
-    elevation: Dp = 8.dp
-): Modifier = this.drawWithContent {
-    val path = Path().apply {
-        addOutline(shape.createOutline(size, layoutDirection, this@drawWithContent))
-    }
-
-    // CLIP the center so the shadow doesn't show through transparency
-    clipPath(path, clipOp = ClipOp.Difference) {
-        // Draw a shadow using the standard Android Framework Paint
-        drawIntoCanvas { canvas ->
-            val paint = Paint().asFrameworkPaint().apply {
-                color = android.graphics.Color.BLACK
-                setShadowLayer(
-                    elevation.toPx(), // blur
-                    0f, 4f,           // offset x, y
-                    android.graphics.Color.argb(100, 0, 0, 0) // color
-                )
-            }
-            canvas.nativeCanvas.drawPath(path.asAndroidPath(), paint)
-        }
-    }
-
-    // Draw the actual button content (border/text) on top
-    drawContent()
 }
 

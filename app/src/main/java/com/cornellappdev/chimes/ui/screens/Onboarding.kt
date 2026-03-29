@@ -42,9 +42,13 @@ import kotlinx.coroutines.launch
 private val ChimesRed = Color(0xFFCC5555)
 private val VeryLightPink = Color(0xFFFEF7F7)
 private val VeryLightGray = Color(0xFFBCB2B2)
+private var onLoginClick: () -> Unit = {}
 
 @Composable
-fun Onboarding () {
+fun Onboarding(
+    onLoginButtonClick: () -> Unit = {}
+) {
+    onLoginClick = onLoginButtonClick
     val bgAlpha = remember { Animatable(1f) }
     val whiteAlpha = remember { Animatable(0f) }
     val logoAlpha = remember { Animatable(0f) }
@@ -169,8 +173,7 @@ fun Onboarding () {
                     LoginButton(
                         text = "Log-in with Google",
                         iconRes = R.drawable.ic_google_g,
-                        contentDescription = "Google logo",
-                        onClick = {}
+                        contentDescription = "Google logo"
                     )
 
                     Spacer(modifier = Modifier.height(15.dp))
@@ -178,8 +181,7 @@ fun Onboarding () {
                     LoginButton(
                         text = "Log-in with Cornell netID",
                         iconRes = R.drawable.ic_cornell_logo,
-                        contentDescription = "Cornell logo",
-                        onClick = {}
+                        contentDescription = "Cornell logo"
                     )
 
                     Spacer(modifier = Modifier.height(45.dp))
@@ -195,7 +197,7 @@ fun Onboarding () {
 
 
                     TextButton(
-                        onClick = {},
+                        onClick = onLoginClick,
                         shape = RoundedCornerShape(0.dp),
                         modifier = Modifier.height(25.dp),
                         contentPadding = PaddingValues(0.dp)
@@ -221,7 +223,6 @@ private fun LoginButton(
     text: String,
     iconRes: Int,
     contentDescription: String,
-    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val curve = 50.dp
@@ -234,7 +235,7 @@ private fun LoginButton(
                 shape = RoundedCornerShape(curve)
             )
             .fillMaxWidth(),
-        onClick = onClick,
+        onClick = onLoginClick,
         shape = RoundedCornerShape(curve),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.White,
