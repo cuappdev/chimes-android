@@ -23,7 +23,7 @@ fun MainNavigation() {
         entryProvider = entryProvider {
             entry<NavigationItem.Onboarding> {
                 Onboarding(
-                    onLoginButtonClick = {
+                    onLoginClick = {
                         backStack.clear()
                         backStack.add(NavigationItem.Home)
                     }

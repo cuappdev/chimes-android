@@ -42,13 +42,11 @@ import kotlinx.coroutines.launch
 private val ChimesRed = Color(0xFFCC5555)
 private val VeryLightPink = Color(0xFFFEF7F7)
 private val VeryLightGray = Color(0xFFBCB2B2)
-private var onLoginClick: () -> Unit = {}
 
 @Composable
 fun Onboarding(
-    onLoginButtonClick: () -> Unit = {}
+    onLoginClick: () -> Unit = {}
 ) {
-    onLoginClick = onLoginButtonClick
     val bgAlpha = remember { Animatable(1f) }
     val whiteAlpha = remember { Animatable(0f) }
     val logoAlpha = remember { Animatable(0f) }
@@ -173,7 +171,8 @@ fun Onboarding(
                     LoginButton(
                         text = "Log-in with Google",
                         iconRes = R.drawable.ic_google_g,
-                        contentDescription = "Google logo"
+                        contentDescription = "Google logo",
+                        onClick = onLoginClick
                     )
 
                     Spacer(modifier = Modifier.height(15.dp))
@@ -181,7 +180,8 @@ fun Onboarding(
                     LoginButton(
                         text = "Log-in with Cornell netID",
                         iconRes = R.drawable.ic_cornell_logo,
-                        contentDescription = "Cornell logo"
+                        contentDescription = "Cornell logo",
+                        onClick = onLoginClick
                     )
 
                     Spacer(modifier = Modifier.height(45.dp))
@@ -222,6 +222,7 @@ fun Onboarding(
 private fun LoginButton(
     text: String,
     iconRes: Int,
+    onClick: () -> Unit,
     contentDescription: String,
     modifier: Modifier = Modifier
 ) {
@@ -235,7 +236,7 @@ private fun LoginButton(
                 shape = RoundedCornerShape(curve)
             )
             .fillMaxWidth(),
-        onClick = onLoginClick,
+        onClick = onClick,
         shape = RoundedCornerShape(curve),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.White,
