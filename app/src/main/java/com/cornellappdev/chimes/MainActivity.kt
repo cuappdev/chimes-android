@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import com.cornellappdev.chimes.ui.components.HeaderButton
 import com.cornellappdev.chimes.ui.navigation.MainNavigation
 import com.cornellappdev.chimes.ui.screens.HomeScreen
+import com.cornellappdev.chimes.ui.screens.Onboarding
 import com.cornellappdev.chimes.ui.theme.ChimesandroidTheme
 
 class MainActivity : ComponentActivity() {

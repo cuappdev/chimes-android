@@ -3,8 +3,12 @@ package com.cornellappdev.chimes.ui.navigation
 sealed class NavigationItem(
     val route: String,
 ) {
-    object Home : NavigationItem (
+    object Home : NavigationItem(
         route = Routes.HOME.name,
+    )
+
+    object Onboarding : NavigationItem(
+        route = Routes.ONBOARDING.name,
     )
 }
 
