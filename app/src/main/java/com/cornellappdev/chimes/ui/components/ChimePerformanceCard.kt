@@ -14,8 +14,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cornellappdev.chimes.R
+import com.cornellappdev.chimes.ui.theme.Montserrat
 
 @Composable
 fun ChimePerformanceCard (timePeriod: String, timeRange: String) {
@@ -34,11 +38,13 @@ fun ChimePerformanceCard (timePeriod: String, timeRange: String) {
             Text(
                 text = timePeriod,
                 fontSize = 18.sp,
+                fontFamily = Montserrat,
                 modifier = Modifier.width(75.dp)
             )
             Spacer(modifier = Modifier.fillMaxHeight().width((1f).dp).border((0.5f).dp, Color(0x4D635858)))
             Text(
                 text = timeRange,
+                fontFamily = Montserrat,
                 fontSize = 18.sp
             )
         }

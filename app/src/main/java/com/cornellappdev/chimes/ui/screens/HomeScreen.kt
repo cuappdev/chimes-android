@@ -21,9 +21,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
@@ -35,19 +37,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.room.util.copy
-import androidx.room3.util.copy
 import com.cornellappdev.chimes.R
 import com.cornellappdev.chimes.ui.components.ChimeCard
 import com.cornellappdev.chimes.ui.components.ChimeKudos
 import com.cornellappdev.chimes.ui.components.ChimePerformanceCard
 import com.cornellappdev.chimes.ui.components.HeaderButton
 import com.cornellappdev.chimes.ui.components.Slope
+import com.cornellappdev.chimes.ui.theme.Montserrat
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
@@ -75,6 +77,7 @@ fun HomeScreen () {
                     text = "Hi, Arielle ☀\uFE0F",
                     color = Color(0xFF4F4E4E),
                     modifier = Modifier.fillMaxHeight(),
+                    fontFamily = Montserrat,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 36.sp
                 )
@@ -120,12 +123,14 @@ fun HomeScreen () {
                                     Text(
                                         text = "Time to chime in!",
                                         modifier = Modifier.fillMaxHeight(),
+                                        fontFamily = Montserrat,
                                         fontWeight = FontWeight.Medium,
                                         fontSize = 18.sp
                                     )
                                 }
                                 Text(
                                     text = "Guess the song that's currently playing",
+                                    fontFamily = Montserrat,
                                     modifier = Modifier.fillMaxHeight(),
                                     fontSize = 15.sp,
                                 )
@@ -138,7 +143,7 @@ fun HomeScreen () {
                                     modifier = Modifier.height(64.dp),
                                     verticalArrangement = Arrangement.spacedBy(4.dp)
                                 ) {
-                                    TextField(
+                                    BasicTextField(
                                         value = song,
                                         onValueChange = { song = it },
                                         singleLine = true,
@@ -146,17 +151,30 @@ fun HomeScreen () {
                                             .width(306.dp)
                                             .height(41.dp)
                                             .border(1.dp, Color(0xFFEFD3D3), shape = RoundedCornerShape(8.dp))
-                                            .background(Color(0xFFFFFFFF), shape = RoundedCornerShape(8.dp)),
-                                        colors = TextFieldDefaults.colors().copy(
-                                            focusedContainerColor = Color(0xFFFFFFFF),
-                                            unfocusedContainerColor = Color(0xFFFFFFFF),
-                                            focusedIndicatorColor = Color.Transparent,
-                                            unfocusedIndicatorColor = Color.Transparent,
-                                            disabledIndicatorColor = Color.Transparent
+                                            .background(Color(0xFFFFFFFF), shape = RoundedCornerShape(8.dp))
+                                            .padding(horizontal = 12.dp),
+                                        textStyle = LocalTextStyle.current.copy(
+                                            fontFamily = Montserrat,
+                                            fontSize = 14.sp,
+                                            color = Color(0xFF4F4E4E)
                                         ),
-                                        shape = RoundedCornerShape(8.dp),)
+                                        decorationBox = { innerTextField ->
+                                            Box(contentAlignment = Alignment.CenterStart) {
+                                                if (song.isEmpty()) {
+                                                    Text(
+                                                        text = "enter a song...",
+                                                        fontFamily = Montserrat,
+                                                        fontSize = 14.sp,
+                                                        color = Color(0xFFAAAAAA)
+                                                    )
+                                                }
+                                                innerTextField()
+                                            }
+                                        }
+                                    )
                                     Text(
                                         text = "+ guess more",
+                                        fontFamily = Montserrat,
                                         modifier = Modifier.fillMaxHeight(),
                                         fontSize = 12.sp,
                                     )
@@ -173,7 +191,8 @@ fun HomeScreen () {
                                         .height(33.dp)
                                 ){
                                     Text(
-                                        text = "submit",
+                                        text = "submit!",
+                                        fontFamily = Montserrat,
                                         fontSize = 14.sp,
                                         color = Color(0xFF655454)
                                     )
@@ -186,7 +205,8 @@ fun HomeScreen () {
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ){
                         Text(
-                            text = "Send Kudos",
+                            text = "Send Kudos! \uD83D\uDC4F",
+                            fontFamily = Montserrat,
                             fontSize = 18.sp
                         )
                         Row (
@@ -209,6 +229,7 @@ fun HomeScreen () {
                     ) {
                         Text(
                             text = "Today's Performance",
+                            fontFamily = Montserrat,
                             fontSize = 18.sp
                         )
                         Column (
