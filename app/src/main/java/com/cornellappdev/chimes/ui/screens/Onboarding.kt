@@ -1,6 +1,9 @@
 package com.cornellappdev.chimes.ui.screens
 
 import android.annotation.SuppressLint
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
@@ -29,13 +32,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cornellappdev.chimes.GlobalState
 import com.cornellappdev.chimes.R
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.Firebase
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.auth
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -47,6 +58,9 @@ private val VeryLightGray = Color(0xFFBCB2B2)
 fun Onboarding(
     onLoginClick: () -> Unit = {}
 ) {
+    val context = LocalContext.current
+    val auth = remember { Firebase.auth }
+
     val bgAlpha = remember { Animatable(1f) }
     val whiteAlpha = remember { Animatable(0f) }
     val logoAlpha = remember { Animatable(0f) }
@@ -83,6 +97,26 @@ fun Onboarding(
     } else {
         minuteHandRotation = 0f
         hourHandRotation = 0f
+    }
+
+    val googleSignInLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+        try {
+            val account = task.getResult(ApiException::class.java)!!
+            val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+            auth.signInWithCredential(credential).addOnCompleteListener { 
+                if (it.isSuccessful) {
+                    GlobalState.userName = it.result.user?.displayName ?: ""
+                    onLoginClick()
+                } else {
+                    Toast.makeText(context, "Firebase Authentication failed: ${it.exception?.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        } catch (e: ApiException) {
+            Toast.makeText(context, "Google Sign-In failed: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
     }
 
     LaunchedEffect(Unit) {
@@ -172,7 +206,14 @@ fun Onboarding(
                         text = "Log-in with Google",
                         iconRes = R.drawable.ic_google_g,
                         contentDescription = "Google logo",
-                        onClick = onLoginClick
+                        onClick = {
+                            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                .requestIdToken(context.getString(R.string.default_web_client_id))
+                                .requestEmail()
+                                .build()
+                            val client = GoogleSignIn.getClient(context, gso)
+                            googleSignInLauncher.launch(client.signInIntent)
+                        }
                     )
 
                     Spacer(modifier = Modifier.height(15.dp))
@@ -303,7 +344,7 @@ private fun ClockLogo(
 
                     translationX = (0.5f - pivotFraction) * size.width
                     translationY = (0.5f - pivotFraction) * size.height
-                    
+
                     rotationZ = hourHandRotation
                     transformOrigin = TransformOrigin(pivotFraction, pivotFraction)
                 }
