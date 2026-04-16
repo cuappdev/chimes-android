@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cornellappdev.chimes.GlobalState
 import com.cornellappdev.chimes.R
 import com.cornellappdev.chimes.ui.components.HeaderButton
 
@@ -45,7 +46,7 @@ fun HomeScreen () {
                 horizontalArrangement = Arrangement.spacedBy(40.dp)
             ) {
                 Text(
-                    text = "Hi, Arielle ☀\uFE0F",
+                    text = "Hi, ${GlobalState.userName.split(" ").firstOrNull() ?: ""} ☀️",
                     color = Color(0xFF4F4E4E),
                     modifier = Modifier.fillMaxHeight(),
                     fontWeight = FontWeight.SemiBold,
