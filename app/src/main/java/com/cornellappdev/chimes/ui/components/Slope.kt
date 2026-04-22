@@ -39,18 +39,18 @@ fun Slope() {
         )
         Image(
             painter = painterResource(R.drawable.ic_music_notes),
-            contentDescription = "",
+            contentDescription = null,
             modifier = Modifier.offset(x = 32.dp, y = 181.dp)
         )
         Image(
             painter = painterResource(R.drawable.ic_trees_back),
-            contentDescription = "",
+            contentDescription = null,
             modifier = Modifier.
             offset(y = 346.dp)
         )
         Image(
             painter = painterResource(R.drawable.ic_slope),
-            contentDescription = "",
+            contentDescription = null,
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
                 .fillMaxWidth()
@@ -72,13 +72,13 @@ fun Slope() {
         )
         Image(
             painter = painterResource(R.drawable.ic_trees_front),
-            contentDescription = "",
+            contentDescription = null,
             modifier = Modifier.
             offset(y = 324.dp)
         )
         Image(
             painter = painterResource(R.drawable.ic_clocktower_day),
-            contentDescription = "",
+            contentDescription = null,
             modifier = Modifier.offset(x = 200.dp, y = 165.dp).height(224.dp).width(164.dp),
         )
     }

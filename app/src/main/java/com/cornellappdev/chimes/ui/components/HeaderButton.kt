@@ -1,7 +1,5 @@
 package com.cornellappdev.chimes.ui.components
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.PaddingValues
@@ -27,7 +25,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
-@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun HeaderButton (iconId: Int, onClick: () -> Unit) {
     Button(

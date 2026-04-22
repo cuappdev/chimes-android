@@ -1,7 +1,5 @@
 package com.cornellappdev.chimes.ui.screens
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -281,7 +279,6 @@ private fun PerformanceSection() {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 private fun NavMenuToggle(expanded: Boolean, onOpen: () -> Unit, onClose: () -> Unit) {
     Box(contentAlignment = Alignment.TopEnd) {
@@ -349,7 +346,6 @@ private fun NavMenuItem(iconId: Int, label: String, showLabel: Boolean = false, 
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.S)
 @Preview(showBackground = true)
 @Composable
 private fun HomeScreenPreview() {

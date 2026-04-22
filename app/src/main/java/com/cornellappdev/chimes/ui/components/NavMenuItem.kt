@@ -1,3 +1,5 @@
+package com.cornellappdev.chimes.ui.components
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box

@@ -1,13 +1,9 @@
 package com.cornellappdev.chimes.ui.components
 
-import android.R
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -23,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun ChimeKudos(emoji: String) {
+fun ChimeKudos(emoji: String, onClick: () -> Unit = {}) {
     Button(modifier = Modifier
         .shadow(
             elevation = 4.dp,
@@ -32,10 +28,9 @@ fun ChimeKudos(emoji: String) {
             spotColor = Color(0x59A86161)
         )
         .clip(CircleShape)
-        .height(64.dp)
-        .width(64.dp),
+        .size(64.dp),
         contentPadding = PaddingValues(0.dp),
-        onClick = {},
+        onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             Color(0xFFFEEEEE)),
     ){

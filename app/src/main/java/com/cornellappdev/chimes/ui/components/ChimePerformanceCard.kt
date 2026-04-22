@@ -1,10 +1,10 @@
 package com.cornellappdev.chimes.ui.components
 
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -41,7 +41,7 @@ fun ChimePerformanceCard (timePeriod: String, timeRange: String) {
                 fontFamily = Montserrat,
                 modifier = Modifier.width(75.dp)
             )
-            Spacer(modifier = Modifier.fillMaxHeight().width((1f).dp).border((0.5f).dp, Color(0x4D635858)))
+            Box(modifier = Modifier.fillMaxHeight().width(0.5.dp).background(Color(0x4D635858)))
             Text(
                 text = timeRange,
                 fontFamily = Montserrat,
