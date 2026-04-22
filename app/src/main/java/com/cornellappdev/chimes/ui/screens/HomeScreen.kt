@@ -49,6 +49,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cornellappdev.chimes.R
@@ -59,7 +60,13 @@ import com.cornellappdev.chimes.ui.components.HeaderButton
 import com.cornellappdev.chimes.ui.components.Slope
 import com.cornellappdev.chimes.ui.theme.Montserrat
 
-@RequiresApi(Build.VERSION_CODES.S)
+private val userName = "Arielle"
+private val performances = listOf(
+    "Morning" to "7:45 AM - 8:00 AM",
+    "Noon" to "1:10 PM - 1:25 PM",
+    "Evening" to "6:00 PM - 6:15 PM"
+)
+
 @Composable
 fun HomeScreen() {
     var song by remember { mutableStateOf("") }
@@ -72,8 +79,6 @@ fun HomeScreen() {
     )
 
     Box(modifier = Modifier.fillMaxSize()) {
-
-        // Scrollable content — blurred when menu open
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -95,158 +100,18 @@ fun HomeScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(28.dp)
             ) {
-                // Space reserved for the sharp header overlay
                 Spacer(modifier = Modifier.height(100.dp))
                 Spacer(modifier = Modifier.height(305.dp))
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight()
-                        .padding(0.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(modifier = Modifier.width(345.dp)) {
-                        ChimeCard(
-                            paddingValues = PaddingValues(start = 20.dp, end = 20.dp, top = 18.dp, bottom = 12.dp),
-                            modifier = Modifier
-                                .width(351.dp)
-                                .height(215.dp)
-                        ) {
-                            Column(verticalArrangement = Arrangement.spacedBy(18.dp)) {
-                                Column(
-                                    modifier = Modifier.height(50.dp),
-                                    verticalArrangement = Arrangement.spacedBy(7.dp)
-                                ) {
-                                    Row(
-                                        modifier = Modifier.height(25.dp),
-                                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                                    ) {
-                                        Text(
-                                            text = "\uD83C\uDF89",
-                                            modifier = Modifier.fillMaxHeight(),
-                                            fontWeight = FontWeight.Medium,
-                                            fontSize = 18.sp
-                                        )
-                                        Text(
-                                            text = "Time to chime in!",
-                                            modifier = Modifier.fillMaxHeight(),
-                                            fontFamily = Montserrat,
-                                            fontWeight = FontWeight.Medium,
-                                            fontSize = 18.sp
-                                        )
-                                    }
-                                    Text(
-                                        text = "Guess the song that's currently playing",
-                                        fontFamily = Montserrat,
-                                        modifier = Modifier.fillMaxHeight(),
-                                        fontSize = 15.sp,
-                                    )
-                                }
-                                Column(
-                                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                                    horizontalAlignment = Alignment.End
-                                ) {
-                                    Column(
-                                        modifier = Modifier.height(64.dp),
-                                        verticalArrangement = Arrangement.spacedBy(4.dp)
-                                    ) {
-                                        BasicTextField(
-                                            value = song,
-                                            onValueChange = { song = it },
-                                            singleLine = true,
-                                            modifier = Modifier
-                                                .width(306.dp)
-                                                .height(41.dp)
-                                                .border(1.dp, Color(0xFFEFD3D3), shape = RoundedCornerShape(8.dp))
-                                                .background(Color(0xFFFFFFFF), shape = RoundedCornerShape(8.dp))
-                                                .padding(horizontal = 12.dp),
-                                            textStyle = LocalTextStyle.current.copy(
-                                                fontFamily = Montserrat,
-                                                fontSize = 14.sp,
-                                                color = Color(0xFF4F4E4E)
-                                            ),
-                                            decorationBox = { innerTextField ->
-                                                Box(contentAlignment = Alignment.CenterStart) {
-                                                    if (song.isEmpty()) {
-                                                        Text(
-                                                            text = "enter a song...",
-                                                            fontFamily = Montserrat,
-                                                            fontSize = 14.sp,
-                                                            color = Color(0xFFAAAAAA)
-                                                        )
-                                                    }
-                                                    innerTextField()
-                                                }
-                                            }
-                                        )
-                                        Text(
-                                            text = "+ guess more",
-                                            fontFamily = Montserrat,
-                                            modifier = Modifier.fillMaxHeight(),
-                                            fontSize = 12.sp,
-                                        )
-                                    }
-                                    Button(
-                                        onClick = {},
-                                        shape = RoundedCornerShape(8.dp),
-                                        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
-                                        border = BorderStroke((0.5f).dp, Color(0xFFE6BFBF)),
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = Color(0xFFFFF3F3)
-                                        ),
-                                        modifier = Modifier
-                                            .width(87.dp)
-                                            .height(33.dp)
-                                    ) {
-                                        Text(
-                                            text = "submit!",
-                                            fontFamily = Montserrat,
-                                            fontSize = 14.sp,
-                                            color = Color(0xFF655454)
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(36.dp))
-                        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                            Text(
-                                text = "Send Kudos! \uD83D\uDC4F",
-                                fontFamily = Montserrat,
-                                fontSize = 18.sp
-                            )
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(64.dp)
-                                    .padding(horizontal = 8.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                ChimeKudos("⭐")
-                                ChimeKudos("💖")
-                                ChimeKudos("👍")
-                                ChimeKudos("👏")
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(28.dp))
-                        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                            Text(
-                                text = "Today's Performance",
-                                fontFamily = Montserrat,
-                                fontSize = 18.sp
-                            )
-                            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                                ChimePerformanceCard("Morning", "7:45 AM - 8:00 AM")
-                                ChimePerformanceCard("Noon", "1:10 PM - 1:25 PM")
-                                ChimePerformanceCard("Evening", "6:00 PM - 6:15 PM")
-                            }
-                        }
-                    }
+                Column(modifier = Modifier.fillMaxWidth()) {
+                    ChimeGuessSection(song = song, onSongChange = { song = it })
+                    Spacer(modifier = Modifier.height(36.dp))
+                    KudosSection()
+                    Spacer(modifier = Modifier.height(28.dp))
+                    PerformanceSection()
                 }
             }
         }
 
-        // Sharp header overlay — never blurred
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -255,7 +120,7 @@ fun HomeScreen() {
             verticalAlignment = Alignment.Top
         ) {
             Text(
-                text = "Hi, Arielle ☀\uFE0F",
+                text = "Hi, $userName ☀\uFE0F",
                 color = Color(0xFF4F4E4E),
                 fontFamily = Montserrat,
                 fontWeight = FontWeight.SemiBold,
@@ -267,6 +132,151 @@ fun HomeScreen() {
                 onOpen = { menuExpanded = true },
                 onClose = { menuExpanded = false }
             )
+        }
+    }
+}
+
+@Composable
+private fun ChimeGuessSection(song: String, onSongChange: (String) -> Unit) {
+    ChimeCard(
+        paddingValues = PaddingValues(start = 20.dp, end = 20.dp, top = 18.dp, bottom = 12.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(215.dp)
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(18.dp)) {
+            Column(
+                modifier = Modifier.height(50.dp),
+                verticalArrangement = Arrangement.spacedBy(7.dp)
+            ) {
+                Row(
+                    modifier = Modifier.height(25.dp),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Text(
+                        text = "\uD83C\uDF89",
+                        modifier = Modifier.fillMaxHeight(),
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 18.sp
+                    )
+                    Text(
+                        text = "Time to chime in!",
+                        modifier = Modifier.fillMaxHeight(),
+                        fontFamily = Montserrat,
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 18.sp
+                    )
+                }
+                Text(
+                    text = "Guess the song that's currently playing",
+                    fontFamily = Montserrat,
+                    modifier = Modifier.fillMaxHeight(),
+                    fontSize = 15.sp,
+                )
+            }
+            Column(
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalAlignment = Alignment.End
+            ) {
+                Column(
+                    modifier = Modifier.height(64.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    BasicTextField(
+                        value = song,
+                        onValueChange = onSongChange,
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(41.dp)
+                            .border(1.dp, Color(0xFFEFD3D3), shape = RoundedCornerShape(8.dp))
+                            .background(Color(0xFFFFFFFF), shape = RoundedCornerShape(8.dp))
+                            .padding(horizontal = 12.dp),
+                        textStyle = LocalTextStyle.current.copy(
+                            fontFamily = Montserrat,
+                            fontSize = 14.sp,
+                            color = Color(0xFF4F4E4E)
+                        ),
+                        decorationBox = { innerTextField ->
+                            Box(contentAlignment = Alignment.CenterStart) {
+                                if (song.isEmpty()) {
+                                    Text(
+                                        text = "enter a song...",
+                                        fontFamily = Montserrat,
+                                        fontSize = 14.sp,
+                                        color = Color(0xFFAAAAAA)
+                                    )
+                                }
+                                innerTextField()
+                            }
+                        }
+                    )
+                    Text(
+                        text = "+ guess more",
+                        fontFamily = Montserrat,
+                        modifier = Modifier.fillMaxHeight(),
+                        fontSize = 12.sp,
+                    )
+                }
+                Button(
+                    onClick = {},
+                    shape = RoundedCornerShape(8.dp),
+                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
+                    border = BorderStroke((0.5f).dp, Color(0xFFE6BFBF)),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFFFF3F3)
+                    ),
+                    modifier = Modifier
+                        .width(87.dp)
+                        .height(33.dp)
+                ) {
+                    Text(
+                        text = "submit!",
+                        fontFamily = Montserrat,
+                        fontSize = 14.sp,
+                        color = Color(0xFF655454)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun KudosSection() {
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Text(
+            text = "Send Kudos! \uD83D\uDC4F",
+            fontFamily = Montserrat,
+            fontSize = 18.sp
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(64.dp)
+                .padding(horizontal = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            ChimeKudos("⭐")
+            ChimeKudos("💖")
+            ChimeKudos("👍")
+            ChimeKudos("👏")
+        }
+    }
+}
+
+@Composable
+private fun PerformanceSection() {
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        Text(
+            text = "Today's Performance",
+            fontFamily = Montserrat,
+            fontSize = 18.sp
+        )
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            performances.forEach { (label, time) ->
+                ChimePerformanceCard(label, time)
+            }
         }
     }
 }
@@ -337,4 +347,11 @@ private fun NavMenuItem(iconId: Int, label: String, showLabel: Boolean = false, 
             )
         }
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.S)
+@Preview(showBackground = true)
+@Composable
+private fun HomeScreenPreview() {
+    HomeScreen()
 }
