@@ -10,6 +10,18 @@ sealed class NavigationItem(
     object Onboarding : NavigationItem(
         route = Routes.ONBOARDING.name,
     )
+
+    object Rsvp : NavigationItem(
+        route = Routes.RSVP.name,
+    )
+
+    object Notifications : NavigationItem(
+        route = Routes.NOTIFICATIONS.name,
+    )
+
+    object SongRequest : NavigationItem(
+        route = Routes.SONG_REQUEST.name,
+    )
 }
 
 /**
@@ -27,4 +39,7 @@ interface NavUnit {
 enum class Routes(override var route: String) : NavUnit {
     HOME("home"),
     ONBOARDING("onboarding"),
+    RSVP("rsvp"),
+    NOTIFICATIONS("notifications"),
+    SONG_REQUEST("song_request"),
 }

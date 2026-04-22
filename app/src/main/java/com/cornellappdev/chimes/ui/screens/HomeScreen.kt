@@ -61,7 +61,11 @@ import com.cornellappdev.chimes.ui.theme.Montserrat
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    onNavigateToRsvp: () -> Unit = {},
+    onNavigateToNotifications: () -> Unit = {},
+    onNavigateToSongRequest: () -> Unit = {}
+) {
     var song by remember { mutableStateOf("") }
     var menuExpanded by remember { mutableStateOf(false) }
 
@@ -265,7 +269,10 @@ fun HomeScreen() {
             NavMenuToggle(
                 expanded = menuExpanded,
                 onOpen = { menuExpanded = true },
-                onClose = { menuExpanded = false }
+                onClose = { menuExpanded = false },
+                onNavigateToRsvp = { menuExpanded = false; onNavigateToRsvp() },
+                onNavigateToNotifications = { menuExpanded = false; onNavigateToNotifications() },
+                onNavigateToSongRequest = { menuExpanded = false; onNavigateToSongRequest() }
             )
         }
     }
@@ -273,7 +280,14 @@ fun HomeScreen() {
 
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
-private fun NavMenuToggle(expanded: Boolean, onOpen: () -> Unit, onClose: () -> Unit) {
+private fun NavMenuToggle(
+    expanded: Boolean,
+    onOpen: () -> Unit,
+    onClose: () -> Unit,
+    onNavigateToRsvp: () -> Unit = {},
+    onNavigateToNotifications: () -> Unit = {},
+    onNavigateToSongRequest: () -> Unit = {}
+) {
     Box(contentAlignment = Alignment.TopEnd) {
         AnimatedVisibility(
             visible = !expanded,
@@ -300,9 +314,9 @@ private fun NavMenuToggle(expanded: Boolean, onOpen: () -> Unit, onClose: () -> 
                 verticalArrangement = Arrangement.spacedBy(4.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                NavMenuItem(iconId = R.drawable.ic_rsvp, label = "RSVP", showLabel = true) { onClose() }
-                NavMenuItem(iconId = R.drawable.ic_music_notes, label = "Music") { onClose() }
-                NavMenuItem(iconId = R.drawable.ic_bell, label = "Bell") { onClose() }
+                NavMenuItem(iconId = R.drawable.ic_rsvp, label = "RSVP", showLabel = true) { onNavigateToRsvp() }
+                NavMenuItem(iconId = R.drawable.ic_music_notes, label = "Music") { onNavigateToSongRequest() }
+                NavMenuItem(iconId = R.drawable.ic_bell, label = "Bell") { onNavigateToNotifications() }
                 NavMenuItem(iconId = R.drawable.ic_settings, label = "Settings") { onClose() }
             }
         }
